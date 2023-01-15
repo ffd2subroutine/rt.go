@@ -15,7 +15,7 @@ func (a Vec3) String() string {
 	return fmt.Sprintf("%f %f %f", a.X, a.Y, a.Z)
 }
 
-func Neg(a Vec3) Vec3 {
+func (a Vec3) Neg() Vec3 {
 	return Vec3{
 		X: -a.X,
 		Y: -a.Y,
@@ -23,7 +23,7 @@ func Neg(a Vec3) Vec3 {
 	}
 }
 
-func Add(a, b Vec3) Vec3 {
+func (a Vec3) Add(b Vec3) Vec3 {
 	return Vec3{
 		X: a.X + b.X,
 		Y: a.Y + b.Y,
@@ -31,7 +31,7 @@ func Add(a, b Vec3) Vec3 {
 	}
 }
 
-func Sub(a, b Vec3) Vec3 {
+func (a Vec3) Sub(b Vec3) Vec3 {
 	return Vec3{
 		X: a.X - b.X,
 		Y: a.Y - b.Y,
@@ -39,7 +39,7 @@ func Sub(a, b Vec3) Vec3 {
 	}
 }
 
-func Mul(a, b Vec3) Vec3 {
+func (a Vec3) Mul(b Vec3) Vec3 {
 	return Vec3{
 		X: a.X * b.X,
 		Y: a.Y * b.Y,
@@ -47,7 +47,7 @@ func Mul(a, b Vec3) Vec3 {
 	}
 }
 
-func MulS(a Vec3, b float64) Vec3 {
+func (a Vec3) MulS(b float64) Vec3 {
 	return Vec3{
 		X: a.X * b,
 		Y: a.Y * b,
@@ -55,11 +55,11 @@ func MulS(a Vec3, b float64) Vec3 {
 	}
 }
 
-func DivS(a Vec3, b float64) Vec3 {
-	return MulS(a, 1.0/b)
+func (a Vec3) DivS(b float64) Vec3 {
+	return a.MulS(1.0 / b)
 }
 
-func Cross(a, b Vec3) Vec3 {
+func (a Vec3) Cross(b Vec3) Vec3 {
 	return Vec3{
 		X: a.Y*b.Z - a.Z*b.Y,
 		Y: a.Z*b.X - a.X*b.Z,
@@ -67,14 +67,14 @@ func Cross(a, b Vec3) Vec3 {
 	}
 }
 
-func Dot(a, b Vec3) float64 {
+func (a Vec3) Dot(b Vec3) float64 {
 	return a.X*b.X + a.Y*b.Y + a.Z*b.Z
 }
 
-func Length(a Vec3) float64 {
-	return math.Sqrt(Dot(a, a))
+func (a Vec3) Length() float64 {
+	return math.Sqrt(a.Dot(a))
 }
 
-func Unit(a Vec3) Vec3 {
-	return DivS(a, Length(a))
+func (a Vec3) Unit() Vec3 {
+	return a.DivS(a.Length())
 }
