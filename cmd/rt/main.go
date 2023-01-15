@@ -9,25 +9,36 @@ import (
 )
 
 const (
-	ImageWidth  int = 256
-	ImageHeight int = 256
+	// Image
+	AspectRation float64 = 16.0 / 9.0
+	ImageWidth   int     = 400
+	ImageHeight  int     = int(float64(ImageWidth) / AspectRation)
 )
 
 func main() {
+	// Camera
+	viewportHeight := 2.0
+	viewportWidth := AspectRation * viewportHeight
+	focalLength := 1.0
+	origin := rt.Vec3{}
+	horizontal := rt.NewVec3(viewportWidth, 0.0, 0.0)
+	vertical := rt.NewVec3(0.0, viewportHeight, 0.0)
+	lowerLeftCorner := origin.Sub(horizontal.DivS(2.0)).Sub(vertical.DivS(2.0)).Sub(rt.NewVec3(0.0, 0.0, focalLength))
+
 	fmt.Fprintf(os.Stdout, "P3\n %d %d\n255\n", ImageWidth, ImageHeight)
 	for j := ImageHeight - 1; j >= 0; j-- {
 		//fmt.Fprintf(os.Stderr, "\rScanlines remaining: %d", j)
 		for i := 0; i < ImageWidth; i++ {
-			pixelColor := rt.Vec3{
-				X: float64(i) / float64((ImageWidth - 1)),
-				Y: float64(j) / float64((ImageHeight - 1)),
-				Z: 0.25,
-			}
+			u := float64(i) / float64(ImageWidth-1)
+			v := float64(j) / float64(ImageHeight-1)
+			ray := rt.NewRay(origin, lowerLeftCorner.Add(horizontal.MulS(u)).Add(vertical.MulS(v)).Sub(origin))
+			pixelColor := rt.RayColor(ray)
 			writeColor(os.Stdout, pixelColor)
 		}
 	}
 }
 
+// TODO: move to output.go
 func writeColor(w io.Writer, pixelColor rt.Vec3) {
 	fmt.Fprintf(w,
 		"%d %d %d\n",
