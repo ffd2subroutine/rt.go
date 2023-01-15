@@ -1,4 +1,4 @@
-package vec3
+package rt
 
 import (
 	"fmt"

@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/ffd2subroutine/rt.go/pkg/math/vec3"
+	"github.com/ffd2subroutine/rt.go/rt"
 )
 
 const (
@@ -18,7 +18,7 @@ func main() {
 	for j := ImageHeight - 1; j >= 0; j-- {
 		//fmt.Fprintf(os.Stderr, "\rScanlines remaining: %d", j)
 		for i := 0; i < ImageWidth; i++ {
-			pixelColor := vec3.Vec3{
+			pixelColor := rt.Vec3{
 				X: float64(i) / float64((ImageWidth - 1)),
 				Y: float64(j) / float64((ImageHeight - 1)),
 				Z: 0.25,
@@ -28,7 +28,7 @@ func main() {
 	}
 }
 
-func writeColor(w io.Writer, pixelColor vec3.Vec3) {
+func writeColor(w io.Writer, pixelColor rt.Vec3) {
 	fmt.Fprintf(w,
 		"%d %d %d\n",
 		int(255.999*pixelColor.X),
