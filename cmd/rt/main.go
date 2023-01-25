@@ -16,6 +16,11 @@ const (
 )
 
 func main() {
+	// World
+	world := rt.NewHittableList()
+	world.Add(rt.NewSphere(rt.NewVec3(0.0, 0.0, -1.0), 0.5))
+	world.Add(rt.NewSphere(rt.NewVec3(0.0, -100.5, -1.0), 100.0))
+
 	// Camera
 	viewportHeight := 2.0
 	viewportWidth := AspectRation * viewportHeight
@@ -25,6 +30,7 @@ func main() {
 	vertical := rt.NewVec3(0.0, viewportHeight, 0.0)
 	lowerLeftCorner := origin.Sub(horizontal.DivS(2.0)).Sub(vertical.DivS(2.0)).Sub(rt.NewVec3(0.0, 0.0, focalLength))
 
+	// Render
 	fmt.Fprintf(os.Stdout, "P3\n %d %d\n255\n", ImageWidth, ImageHeight)
 	for j := ImageHeight - 1; j >= 0; j-- {
 		//fmt.Fprintf(os.Stderr, "\rScanlines remaining: %d", j)
@@ -32,7 +38,7 @@ func main() {
 			u := float64(i) / float64(ImageWidth-1)
 			v := float64(j) / float64(ImageHeight-1)
 			ray := rt.NewRay(origin, lowerLeftCorner.Add(horizontal.MulS(u)).Add(vertical.MulS(v)).Sub(origin))
-			pixelColor := rt.RayColor(ray)
+			pixelColor := rt.RayColor(ray, world)
 			writeColor(os.Stdout, pixelColor)
 		}
 	}
